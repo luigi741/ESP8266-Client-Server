@@ -18,27 +18,6 @@ String homePage = "<link rel='stylesheet' href='https://cdnjs.cloudflare.com/aja
 const char* host = "192.168.45.73";
 
 void setup() {
-
-    // https://stackoverflow.com/questions/37664360/arduino-ide-esp8266-json-decode-from-url
-    String JSON = "";
-    bool httpBody = false;
-
-    while (client.available()) {
-        String line = client.readStringUntil('\r');
-        if (!httpBody && line.charAt(1) == '{') {
-            httpBody = true;
-        }
-
-        if (httpBody) {
-            JSON += line;
-        }
-    }
-    StaticJsonBuffer<400> jsonBuffer;
-    Serial.println("Got data: ");
-    Serial.println(JSON);
-    JsonObject& root = jsonBuffer.parseObject(JSON);
-    String data = root["url"];
-      
     Serial.begin(9600);
     while (!Serial) {
         ;
@@ -46,7 +25,7 @@ void setup() {
     WiFi.begin("Galaxy Note5 WiFi", "luigi278678");  //Connect to the WiFi network
 
     while (WiFi.status() != WL_CONNECTED) {  // Wait for connection
-        delay(500);
+        delay(1000);
         Serial.println("Waiting to connect...");
     }
 
@@ -66,12 +45,76 @@ void setup() {
     server.on("/textbox", []() {
         server.send(200, "text/html", homePage);
         Serial.print("Entered text!");
-        http.begin("http://192.168.43.75/");
+        http.begin("http://192.168.43.75/textbox");
         int httpCode = http.GET();
         Serial.print("HTTP Code" + httpCode);
 
+        // https://stackoverflow.com/questions/37664360/arduino-ide-esp8266-json-decode-from-url
+        String JSON = "";
+        bool httpBody = false;
+
+        while (client.available()) {
+            String line = client.readStringUntil('\r');
+            if (!httpBody && line.charAt(1) == '{') {
+                httpBody = true;
+            }
+
+            if (httpBody) {
+                JSON += line;
+            }
+        }
+        StaticJsonBuffer<400> jsonBuffer;
+        Serial.println("Got data: ");
+        Serial.println(JSON);
+        JsonObject& root = jsonBuffer.parseObject(JSON);
+        String data = root["url"];
+        root.printTo(Serial);
         // https://stackoverflow.com/questions/34078497/esp8266-wificlient-simple-http-get
     });
+
+    server.on("/timer1", []() {
+        server.send(200, "text/html", homePage);
+        Serial.print("1");
+    });
+
+    server.on("/timer2", []() {
+        server.send(200, "text/html", homePage);
+        Serial.print("2");    
+    });
+
+    server.on("/timer3", []() {
+        server.send(200, "text/html", homePage);
+        Serial.print("3");    
+    });
+
+    server.on("/red", []() {
+        server.send(200, "text/html", homePage);    
+        Serial.print("r");
+    });
+
+    server.on("/green", []() {
+        server.send(200, "text/html", homePage);  
+        Serial.print("g");  
+    });
+
+    server.on("/blue", []() {
+        server.send(200, "text/html", homePage);
+        Serial.print("b");
+    });
+
+    server.on("/purple", []() {
+        server.send(200, "text/html", homePage);    
+        Serial.print("p");
+    });
+
+    server.on("/teal", []() {
+        server.send(200, "text/html", homePage);    
+        Serial.print("t");
+    });
+
+    server.on("/", handleRootPath);      //Associate the handler function to the path
+    server.begin();                                       //Start the server
+    Serial.println("Server listening");
 }
 
 void loop() {
@@ -79,8 +122,30 @@ void loop() {
     HTTPClient http;
     http.begin("http://192.168.43.75/");
     int httpCode = http.GET();
+    Serial.println(httpCode);
+
+    String intData = http.getString();
+    Serial.println(intData);
+
+    http.end();
+    delay(1000);
 
     // https://www.arduino.cc/en/Tutorial/WebServer
+
+
+    // https://techtutorialsx.com/2016/07/17/esp8266-http-get-requests/
+    if (WiFi.status() == WL_CONNECTED) {
+        HTTPClient http2;
+        http2.begin("http://192.168.43.75/textbox");
+        int httpCode = http2.GET();
+
+        if (httpCode > 0 ) {
+            String payload = http2.getString();
+            Serial.println(payload);
+        }
+        http2.end();
+    }
+    delay(3000);
 }
 
 void handleRootPath() {            //Handler for the rooth path

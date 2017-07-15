@@ -14,22 +14,50 @@
                 <div class='tile is-parent is-vertical'>
                     <article class='tile is-child notification is-primary' style='background-color: #A232FE'>
                         <p class='title'>LED Controller</p>
-                        <br>
-                        <a class='button is-success is-large' href='/button1'>ON</a>
+                        <p class='subtitle'>Turn on some LEDs!</p>
+                        <a class='button is-success is-large' href='/button1' style='margin-right: 20px'>ON</a>
                         <a class='button is-danger is-large' href='/button2'>OFF</a>
                     </article>
                     <article class='tile is-child notification is-warning'>
-                        <p class='title'>...tiles</p>
-                        <p class='subtitle'>Bottom tile</p>
+                        <p class='title'>Timer</p>
+                        <p class='subtitle'>This specifies a value to send to a timer.</p>
+                            <div class='field'>
+                                <label class='label'>Time Increments</label>
+                                <p class='control'>
+                                    <span class='select'>
+                                        <select id='timerSelect'>
+                                            <option id='opt1' value='10'>10 Seconds</option>
+                                            <option id='opt2' value='20'>20 Seconds</option>
+                                            <option id='opt3' value='30'>30 Seconds</option>
+                                        </select>
+                                    </span>
+                                </p>
+                            </div>
+                            <div>
+                                <p>
+                                    <button id='timerSubmit' class='button is-primary'>Submit</button>
+                                </p>
+                            </div>
                     </article>
                 </div>
                 <div class='tile is-parent'>
-                    <article class='tile is-child notification is-info'>
-                        <p class='title'>Middle tile</p>
-                        <p class='subtitle'>With an image</p>
-                        <figure class='image is-4by3'>
+                    <article class='tile is-child notification is-info' style='background-color: #6BB8FD'>
+                        <p class='title'>RGB LEDs</p>
+                        <p class='subtitle'>Change the colors</p>
+                        <!-- <figure class='image is-4by3'>
                             <img src='http://bulma.io/images/placeholders/640x480.png'>
-                        </figure>
+                        </figure> -->
+                        <br>
+                        <div>
+                            <a href='/red' style='margin-left: 80px; background-color: red; color: white' class='button is-large' type='button' name='red'>RED</a>
+                            <a href='/green' style='margin-left: 30px; background-color: green; color: white' class='button is-large' type='button' name='green'>GREEN</a>
+                            <a href='/blue' style='margin-left: 30px; background-color: blue; color: white' class='button is-large' type='button' name='blue'>BLUE</a>
+                        </div>
+                        <br>
+                        <div>
+                            <a href='/purple' style='margin-left: 120px; background-color: purple; color: white' class='button is-large' type='button' name='purple'>PURPLE</a>
+                            <a href='/teal' style='margin-left: 30px; background-color: aqua' class='button is-large' type='button' name='teal'>TEAL</a>
+                        </div>
                     </article>
                 </div>
             </div>
@@ -61,6 +89,8 @@
 
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
 <script type='text/javascript'>
+    var RequestHTTP = new XMLHttpRequest();
+
     function consoleLog() {
         console.log('Clicked on button!');
     }
@@ -75,6 +105,22 @@
             var textBox = document.getElementById('myText').value;
             console.log('Clicked My Button!');
             $.get('/textbox', { text: textBox });
+        });
+
+        $('#timerSubmit').click(function() {
+            var timer = $('#timerSelect').val()
+            if (timer == '10') {
+                RequestHTTP.open('GET', '/timer1', true);
+                RequestHTTP.send();
+            }
+            else if (timer == '20') {
+                RequestHTTP.open('GET', '/timer2', true);
+                RequestHTTP.send();
+            }
+            else if (timer == '30') {
+                RequestHTTP.open('GET', '/timer1', true);
+                RequestHTTP.send();
+            }
         });
     });
 </script>
