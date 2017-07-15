@@ -1,0 +1,80 @@
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.3/css/bulma.min.css'>
+
+<nav class='navbar' style='background-color: #00FFFF'>
+    <div class='navbar-brand' style='color: blue'>
+        <a style='font-size: 24px' class='navbar-item'>The Birds: CIS 4930 - Embedded Systems</a>
+    </div>
+
+</nav>
+<br>
+<div class='container is-fluid'>
+    <div class='tile is-ancestor'>
+        <div class='tile is-vertical is-8'>
+            <div class='tile'>
+                <div class='tile is-parent is-vertical'>
+                    <article class='tile is-child notification is-primary' style='background-color: #A232FE'>
+                        <p class='title'>LED Controller</p>
+                        <br>
+                        <a class='button is-success is-large' href='/button1'>ON</a>
+                        <a class='button is-danger is-large' href='/button2'>OFF</a>
+                    </article>
+                    <article class='tile is-child notification is-warning'>
+                        <p class='title'>...tiles</p>
+                        <p class='subtitle'>Bottom tile</p>
+                    </article>
+                </div>
+                <div class='tile is-parent'>
+                    <article class='tile is-child notification is-info'>
+                        <p class='title'>Middle tile</p>
+                        <p class='subtitle'>With an image</p>
+                        <figure class='image is-4by3'>
+                            <img src='http://bulma.io/images/placeholders/640x480.png'>
+                        </figure>
+                    </article>
+                </div>
+            </div>
+            <div class='tile is-parent'>
+                <article class='tile is-child notification is-danger'>
+                    <p class='title'>LCD Communications</p>
+                    <p class='subtitle'>Send a message to the LCD!</p>
+                    <div class='content'>
+                        <form action='/textbox' method='get'>
+                            Text: <input type='text' name='textbox', id='myText'>
+                            <input class='button is-success is-small' type='submit', id='myButton' value='Submit' onclick='textBoxPrint()'>
+                        </form>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div class='tile is-parent'>
+            <article class='tile is-child notification is-success'>
+                <div class='content'>
+                    <p class='title'>Temperature Sensor</p>
+                    <p class='subtitle'>Retrieves ambient temperature</p>
+                    <div class='content'>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+</div>
+
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script type='text/javascript'>
+    function consoleLog() {
+        console.log('Clicked on button!');
+    }
+
+    function textBoxPrint() {
+        var textBox = document.getElementById('myText').value;
+        console.log(textBox);
+    }
+
+    $(document).ready(function() {
+        $('#myButton').click(function() {
+            var textBox = document.getElementById('myText').value;
+            console.log('Clicked My Button!');
+            $.get('/textbox', { text: textBox });
+        });
+    });
+</script>
