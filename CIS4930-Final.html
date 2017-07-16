@@ -21,23 +21,23 @@
                     <article class='tile is-child notification is-warning'>
                         <p class='title'>Timer</p>
                         <p class='subtitle'>This specifies a value to send to a timer.</p>
-                            <div class='field'>
-                                <label class='label'>Time Increments</label>
-                                <p class='control'>
-                                    <span class='select'>
+                        <div class='field'>
+                            <label class='label'>Time Increments</label>
+                            <p class='control'>
+                                <span class='select'>
                                         <select id='timerSelect'>
                                             <option id='opt1' value='10'>10 Seconds</option>
                                             <option id='opt2' value='20'>20 Seconds</option>
                                             <option id='opt3' value='30'>30 Seconds</option>
                                         </select>
                                     </span>
-                                </p>
-                            </div>
-                            <div>
-                                <p>
-                                    <button id='timerSubmit' class='button is-primary'>Submit</button>
-                                </p>
-                            </div>
+                            </p>
+                        </div>
+                        <div>
+                            <p>
+                                <button id='timerSubmit' class='button is-primary'>Submit</button>
+                            </p>
+                        </div>
                     </article>
                 </div>
                 <div class='tile is-parent'>
@@ -67,8 +67,8 @@
                     <p class='subtitle'>Send a message to the LCD!</p>
                     <div class='content'>
                         <form action='/textbox' method='get'>
-                            Text: <input type='text' name='textbox', id='myText'>
-                            <input class='button is-success is-small' type='submit', id='myButton' value='Submit' onclick='textBoxPrint()'>
+                            Text: <input type='text' name='textbox' , id='myText'>
+                            <input class='button is-success is-small' type='submit' , id='myButton' value='Submit' onclick='textBoxPrint()'>
                         </form>
                     </div>
                 </article>
@@ -77,9 +77,11 @@
         <div class='tile is-parent'>
             <article class='tile is-child notification is-success'>
                 <div class='content'>
-                    <p class='title'>Temperature Sensor</p>
-                    <p class='subtitle'>Retrieves ambient temperature</p>
+                    <p class='title'>Motion Detection</p>
+                    <p class='subtitle'>Enable IR sensor to detect movement</p>
                     <div class='content'>
+                        <p id='cardTime'>Suh Dude</p>
+                        <a class='button is-primary' onclick='startTime()'>TEST</a>
                     </div>
                 </div>
             </article>
@@ -87,10 +89,16 @@
     </div>
 </div>
 
+<footer class='footer'>
+    <div class='container'>
+        <div class='content has-text-centered'>
+            <p>Built with HTML/JavaScript using Bulma CSS Framework</p>
+        </div>
+    </div>
+</footer>
+
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
 <script type='text/javascript'>
-    var RequestHTTP = new XMLHttpRequest();
-
     function consoleLog() {
         console.log('Clicked on button!');
     }
@@ -100,16 +108,52 @@
         console.log(textBox);
     }
 
+    function addText() {
+        var pTag = document.getElementById('cardTime');
+        pTag.innerHTML = 'Changed the text!';
+    }
+
+    function startTime() {
+        var today = new Date();
+        var h = today.getHours();
+        var meridiem;
+
+        if (h >= 12) {
+            meridiem = 'PM';
+        }
+        else if (h >= 0 && h < 12) {
+            meridiem = 'AM';
+        }
+
+        if (h > 12) {
+            h -= 12;
+        }
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+        m = checkTime(m);
+        s = checkTime(s);
+        document.getElementById('cardTime').innerHTML = h + ":" + m + ":" + s + ' ' + meridiem;
+        var t = setTimeout(startTime, 500);
+    }
+    function checkTime(i) {
+        if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+        return i;
+    }
+
     $(document).ready(function() {
         $('#myButton').click(function() {
             var textBox = document.getElementById('myText').value;
             console.log('Clicked My Button!');
-            $.get('/textbox', { text: textBox });
+            $.get('/textbox', {
+                text: textBox
+            });
         });
 
         $('#timerSubmit').click(function() {
-            var timer = $('#timerSelect').val()
+            var RequestHTTP = new XMLHttpRequest();
+            var timer = $('#timerSelect').val();
             if (timer == '10') {
+                console.log('Timer = 10');
                 RequestHTTP.open('GET', '/timer1', true);
                 RequestHTTP.send();
             }
@@ -118,7 +162,7 @@
                 RequestHTTP.send();
             }
             else if (timer == '30') {
-                RequestHTTP.open('GET', '/timer1', true);
+                RequestHTTP.open('GET', '/timer3', true);
                 RequestHTTP.send();
             }
         });
