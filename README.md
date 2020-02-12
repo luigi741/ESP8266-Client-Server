@@ -1,8 +1,8 @@
-//=================================================================================  
+//====================================================================  
 // ESP8266-Client-Server  
 // By: Luis Castro, Cody Krukauskas, Joey Kleiner, Sterling Price  
 // 07/16/17  
-//=================================================================================  
+//====================================================================  
 
 The aim of this project was to create a web server that could send commands to our
 PIC18F4550 microcontroller from the internet. The client connects to the website and then
